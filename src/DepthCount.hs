@@ -1,3 +1,5 @@
+import System.IO
+
 dc :: (Ord a) => [a] -> Int
 dc xs = idc xs 0 where
     idc [] n = n
@@ -11,9 +13,16 @@ mdc xs = imdc xs Nothing where
     imdc (x1:(x2:xs)) Nothing = if x2 > x1 then imdc (x2:xs) (Just 1) else imdc (x2:xs) (Just 0)
     imdc (x1:(x2:xs)) (Just n) = if x2 > x1 then imdc (x2:xs) (Just (n+1)) else imdc (x2:xs) (Just n)
 
+tc :: (Num a) => [a] -> [a]
+tc [] = []
+tc (x1:[]) = []
+tc (x1:x2:[]) = []
+tc (x1:x2:x3:xs) = (x1+x2+x3) : tc (x2:x3:xs)
+
 main = do
-    print(mdc [1,2,3,4])
-    print(mdc [6,2,5,2,1])
-    print(mdc [1.0,9.5,9.4,10.1,3])
-    print(mdc [1])
-    print(mdc ([]::[Int]))
+    handle <- openFile "depth_data.txt" ReadMode
+    contents <- hGetContents handle
+    let depths = lines contents
+    print(mdc ((map read depths)::[Int]))
+    let ds = (map read depths)::[Int]
+    print(mdc (tc ds))
