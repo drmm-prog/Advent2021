@@ -4,12 +4,12 @@ data Command = Forward Int
              | Down Int
              | Up Int
 
-dive :: [Command] -> (Int,Int)
-dive coms = follow coms (0,0) where
+dive :: [Command] -> (Int,Int,Int)
+dive coms = follow coms (0,0,0) where
     follow [] pos = pos
-    follow ((Forward n):coms) (x, y) = follow coms (x+n,y)
-    follow ((Down n):coms) (x, y) = follow coms (x, y+n)
-    follow ((Up n):coms) (x,y) = follow coms (x,y-n)
+    follow ((Forward n):coms) (a, x, y) = follow coms (a, x+n, y + a*n)
+    follow ((Down n):coms) (a, x, y) = follow coms (a+n, x, y)
+    follow ((Up n):coms) (a, x, y) = follow coms (a-n, x, y)
 
 getSteps :: String -> Int
 getSteps (c:[]) = (read [c])::Int
@@ -24,5 +24,5 @@ main = do
     handle <- openFile "commands.txt" ReadMode
     contents <- hGetContents handle
     let commands = map s2c (lines contents)
-    let (x,y) = dive commands
-    print((x, y, x*y))
+    let (a,x,y) = dive commands
+    print((a, x, y, x*y))
