@@ -20,7 +20,7 @@ tc (x1:x2:[]) = []
 tc (x1:x2:x3:xs) = (x1+x2+x3) : tc (x2:x3:xs)
 
 main = do
-    handle <- openFile "depth_data.txt" ReadMode
+    handle <- openFile "data/depth_data.txt" ReadMode
     contents <- hGetContents handle
     let depths = lines contents
     print(mdc ((map read depths)::[Int]))

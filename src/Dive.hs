@@ -21,7 +21,7 @@ s2c ('u':tl) = Up (getSteps tl)
 s2c ('d':tl) = Down (getSteps tl)
 
 main = do
-    handle <- openFile "commands.txt" ReadMode
+    handle <- openFile "data/commands.txt" ReadMode
     contents <- hGetContents handle
     let commands = map s2c (lines contents)
     let (a,x,y) = dive commands
