@@ -32,8 +32,35 @@ getGamma binaries =
             sum2gam [] _ = []
             sum2gam (x:xs) len = if x > (len - x) then 1 : sum2gam xs len else 0 : sum2gam xs len
 
+splitList :: (Num a1, Num b) => [[Char]] -> ((a1, b, [[Char]], [[Char]]) -> (Char, [a2])) -> (Char, [a2])
+splitList [] f = (' ',[])
+splitList strs f = 
+    let lrSplit (x:xs) (cl, cr, l, r) = if head x == '0' then lrSplit xs (cl + 1, cr, (tail x):l, r) else lrSplit xs (cl, cr + 1, l, (tail x):r)
+        lrSplit [] (cl, cr, l, r) = (cl, cr, l, r)
+    in
+        f (lrSplit strs (0, 0, [], [])) 
+
+path :: (Num a1, Num b) =>[[Char]] -> ((a1, b, [[Char]], [[Char]]) -> (Char, [[Char]])) -> [Char]
+path [] f = ""
+path [x] f = x
+path (x:xs) f =
+    let
+        (c, l) = splitList (x:xs) f 
+    in
+        c : path l f
+
+getOxy strs = path strs f where
+    f (zeros, ones, l, r) = if ones >= zeros then ('1',r) else ('0',l)
+
+getCar strs = path strs f where
+    f (zeros, ones, l, r) = if zeros <= ones then ('0',l) else ('1',r)
+
 main = do
     handle <- openFile "data/bins.txt" ReadMode
     contents <- hGetContents handle
     let g = getGamma (lines contents)
     print(b2i g * b2i (invBin g))
+    let o = getOxy (lines contents)
+    let c = getCar (lines contents)
+    print(o, c, b2i (s2il o) * b2i (s2il c))
+    
