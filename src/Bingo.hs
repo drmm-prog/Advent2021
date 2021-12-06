@@ -39,6 +39,9 @@ valueBoard = foldr bSum 0 where
     bSum ((a,False):xs) n = bSum xs (a+n)
     bSum ((a,True):xs) n = bSum xs n 
 
+
+mask bools vals = getRight (unzip (filter getLeft (zip bools vals)))
+
 playSequence :: [Int] -> [[[(Int,Bool)]]] -> Maybe Int
 playSequence [] boards = Nothing 
 playSequence (n:ns) boards = 
@@ -46,11 +49,22 @@ playSequence (n:ns) boards =
         newBoards = map (updateBoard n) boards
         success = map checkBoard newBoards
     in 
-        if or success then getBoardResult success newBoards else playSequence ns newBoards where
-            getBoardResult [] bs = Nothing
-            getBoardResult (False:xs) bs = getBoardResult xs (tail bs)
-            getBoardResult (True:xs) bs = Just (n * valueBoard (head bs))
+        if or success then Just (n * valueBoard (head (mask success newBoards))) else playSequence ns newBoards
             
+getLastBoard :: [Int] -> [[[(Int,Bool)]]] -> Maybe Int
+getLastBoard = accGetLast 0 [] where
+    accGetLast n b [] _ = Just (n * valueBoard b)
+    accGetLast n b ns [] = Just (n * valueBoard b)
+    accGetLast x b (n:ns) boards = 
+        let
+            newBoards = map (updateBoard n) boards
+            success = map checkBoard newBoards
+            b' = if winners == [] then b else head winners where
+                winners = mask success newBoards
+        in 
+            if or success then accGetLast n b' ns (mask (map not success) newBoards) else accGetLast n b' ns newBoards
+ 
+                    
 
 main = do
     handle <- openFile "data/bingo.txt" ReadMode
@@ -59,3 +73,4 @@ main = do
     let nums = map read (split (==',') (head d)) ::[Int]
     let boards = readBoard (tail d) 
     print (playSequence nums boards)
+    print (getLastBoard nums boards)
