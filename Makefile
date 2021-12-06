@@ -1,4 +1,4 @@
-all: Depth Dive
+all: Depth Dive Diagnose Bingo
 
 Depth:
 	ghc -o build/DepthCount -odir tmp -hidir tmp src/DepthCount.hs
@@ -10,4 +10,8 @@ Dive:
 
 Diagnose:
 	ghc -o build/Diagnose -odir tmp -hidir tmp src/Diagnose.hs
+	rm tmp/*
+
+Bingo:
+	ghc -o build/Bingo -odir tmp -hidir tmp src/Bingo.hs
 	rm tmp/*
