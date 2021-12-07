@@ -15,3 +15,7 @@ Diagnose:
 Bingo:
 	ghc -o build/Bingo -odir tmp -hidir tmp src/Bingo.hs
 	rm tmp/*
+
+Venture:
+	ghc -o build/Venture -odir tmp -hidir tmp src/Venture.hs
+	rm tmp/*
