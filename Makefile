@@ -19,3 +19,7 @@ Bingo:
 Venture:
 	ghc -o build/Venture -odir tmp -hidir tmp src/Venture.hs
 	rm tmp/*
+
+Lantern:
+	ghc -o build/Lantern -odir tmp -hidir tmp src/Lantern.hs
+	rm tmp/*
