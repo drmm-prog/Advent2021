@@ -23,3 +23,7 @@ Venture:
 Lantern:
 	ghc -o build/Lantern -odir tmp -hidir tmp src/Lantern.hs
 	rm tmp/*
+
+Whale:
+	ghc -o build/Whale -odir tmp -hidir tmp src/Whale.hs
+	rm tmp/*
