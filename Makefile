@@ -27,3 +27,7 @@ Lantern:
 Whale:
 	ghc -o build/Whale -odir tmp -hidir tmp src/Whale.hs
 	rm tmp/*
+
+Display:
+	ghc -o build/Display -odir tmp -hidir tmp src/Display.hs
+	rm tmp/*

@@ -44,6 +44,7 @@ makeLine a b = followLine (direction a b) a b where
         | a == b = [a]
         | otherwise = a : followLine d (vecAdd a d) b
 
+count :: Num p => (t -> p) -> Btree (a1, Btree (a2, t)) -> p
 count f Lf = 0
 count f (Br (x,ytree) l r) = (ycount f ytree) + (count f l) + (count f r) where
     ycount f Lf = 0
